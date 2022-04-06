@@ -18,26 +18,27 @@ exports.show = function(req, res, next){
 }
 
 exports.update = function(req, res, next){
-    if(!req.body.name){
+    /* if(!req.body.name){
         return(next(createError(400, "name is required")));
-    }
+    } */
 
     Book.findOne({_id: ObjectId(req.params.id)})
     .then( (book) => {
         if(!book) {
             return (next(createError(404,"no such id")))
         }
-        book.name = req.body.name
-        book.author = req.body.author
-        book.genre = req.body.genre
-        book.bookRead = req.body.bookRead
-        book.isbn = req.body.isbn
-        book.blurb = req.body.blurb
+        if(req.body.name) {book.name = req.body.name}
+        if(req.body.author) {book.author = req.body.author}
+        if(req.body.genre) {book.genre = req.body.genre}
+        if(req.body.bookRead) {book.bookRead = req.body.bookRead}
+        if(req.body.isbn) {book.isbn = req.body.isbn}
+        if(req.body.blurb) {book.blurb = req.body.blurb}
 
         book.save() 
             .then( () => res.send ({result: true}))
     })
-}
+} // supports partial update without deleting fields
+
 
 exports.delete = function(req, res, next){
     Book.deleteOne({_id: ObjectId(req.params.id)})
@@ -101,4 +102,5 @@ exports.markAsRead = function(req, res, next){
         book.save()
             .then( () => res.send ({result: true}))
     })
-}
+} // quickly set bookRead as true
+
