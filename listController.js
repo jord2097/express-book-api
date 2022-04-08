@@ -18,8 +18,8 @@ exports.show = function(req, res, next){
 }
 
 exports.update = function(req, res, next){
-    /* if(!req.body.name){
-        return(next(createError(400, "name is required")));
+    /* if(!req.body.title){
+        return(next(createError(400, "title is required")));
     } */
 
     Book.findOne({_id: ObjectId(req.params.id)})
@@ -27,7 +27,7 @@ exports.update = function(req, res, next){
         if(!book) {
             return (next(createError(404,"no such id")))
         }
-        if(req.body.name) {book.name = req.body.name}
+        if(req.body.title) {book.title = req.body.title}
         if(req.body.author) {book.author = req.body.author}
         if(req.body.genre) {book.genre = req.body.genre}
         if(req.body.bookRead) {book.bookRead = req.body.bookRead}
@@ -38,7 +38,6 @@ exports.update = function(req, res, next){
             .then( () => res.send ({result: true}))
     })
 } // supports partial update without deleting fields
-
 
 exports.delete = function(req, res, next){
     Book.deleteOne({_id: ObjectId(req.params.id)})
@@ -52,12 +51,12 @@ exports.delete = function(req, res, next){
 }
 
 exports.create = function(req, res, next){
-    if(!req.body.name){
-        return (next(createError(400, "name is required")))        
+    if(!req.body.title){
+        return (next(createError(400, "title is required")))        
     }
 
     const book = new Book({
-        name: req.body.name,
+        title: req.body.title,
         author: req.body.author,
         genre: req.body.genre,
         bookRead: req.body.bookRead,
@@ -71,7 +70,7 @@ exports.create = function(req, res, next){
 
 exports.searchTitle = function(req, res, next){
     console.log(req.params.title)
-    Book.findOne({name: req.params.title})     
+    Book.findOne({title: req.params.title})     
     .then((bookitem) => {
         if(!bookitem){
             return (next(createError("No book with that title"))); 
@@ -81,14 +80,14 @@ exports.searchTitle = function(req, res, next){
 }
 
 exports.searchAuthor = function(req,res,next){
-    Book.findOne({author: req.params.author})
+    Book.find({author: req.params.author})
     .then((bookitem) => {
         if(!bookitem){
             return (next(createError("No book with that author")))
         }
         res.send(bookitem)
     })
-}
+} // finds all books from a given author
 
 exports.markAsRead = function(req, res, next){
     Book.findOne({_id: ObjectId(req.params.id)})

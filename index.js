@@ -3,9 +3,10 @@ const app = express()
 const port = process.env.PORT || 3000
 const router = require('./router')
 const mongoose = require("mongoose");
+const cors = require("cors");
 const uri = "mongodb+srv://jord2097:9Y8ML4kvEPcTqR99@cluster0.q2ktn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
-
+app.use(cors())
 app.use(express.json());
 app.use(router);
 
